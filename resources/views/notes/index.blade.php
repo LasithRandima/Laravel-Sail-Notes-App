@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('LightNotes') }}
+            {{ request()->routeIs('notes.index') ? __('LightNotes') : __('Trash') }}
         </h2>
     </x-slot>
 
@@ -12,8 +12,10 @@
                 {{ session('success') }}
             </x-alert-success>
 
+            @if (request()->routeIs('notes.index'))
+                <a href="{{ route('notes.create') }}" class="btn-link btn-lg text-violet-800 mb-8">+ New Note</a>
+            @endif
 
-            <a href="{{ route('notes.create') }}" class="btn-link btn-lg text-violet-800 mb-8">+ New Note</a>
 
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -23,9 +25,15 @@
                     <div class="my-6 p-6 bg-white-800 border border-gray-400 shadow-sm sm:rounded-lg">
                         <h2 class="font-bold text-2xl">
 
-                            {{-- route model binding --}}
-                            <a href="{{ route('notes.show', $note) }}">{{ $note->title }}</a>
 
+                            {{-- route model binding --}}
+                            <a
+                            @if (request()->routeIs('notes.index'))
+                                href="{{ route('notes.show', $note) }}"
+                            @else
+                                href="{{ route('trashed.show', $note) }}"
+                            @endif
+                            >{{ $note->title }}</a>
                         </h2>
                         <p class="mt-2">
                             {{ Str::limit($note->text, 200) }}
@@ -34,7 +42,11 @@
                     </div>
 
                     @empty
-                        <p>You Have no posts yet.</p>
+                        @if (request()->routeIs('notes.index'))
+                            <p>You Have no posts yet.</p>
+                        @else
+                            <p>No Item In The Trash.</p>
+                        @endif
                     @endforelse
 
 
