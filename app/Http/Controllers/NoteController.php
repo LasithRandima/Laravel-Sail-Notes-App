@@ -37,7 +37,27 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request);
+        $request->validate([
+            'title' => 'required|max:120',
+            'text' => 'required',
+        ]);
+
+        // $note = New Note([
+        //     'user_id' => Auth::id(),
+        //     'title' => $request->title,
+        //     'text' => $request->text,
+        // ]);
+
+        // $note->save();
+
+        Note::create([
+            'user_id' => Auth::id(),
+            'title' => $request->title,
+            'text' => $request->text,
+        ]);
+
+        return to_route('notes.index');
     }
 
     /**

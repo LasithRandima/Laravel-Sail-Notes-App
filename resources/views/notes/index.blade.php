@@ -7,13 +7,17 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
+            <a href="{{ route('notes.create') }}" class="btn-link btn-lg text-violet-800 mb-8">+ New Note</a>
+
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
                     @forelse($notes as $note)
                     <div class="my-6 p-6 bg-white-800 border border-gray-400 shadow-sm sm:rounded-lg">
                         <h2 class="font-bold text-2xl">
-                            {{ $note->title }}
+                            <a href="{{ route('notes.show', $note->id) }}">{{ $note->title }}</a>
                         </h2>
                         <p class="mt-2">
                             {{ Str::limit($note->text, 200) }}
